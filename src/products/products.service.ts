@@ -10,7 +10,6 @@ import { CreateProductDto } from './dto/create.dto';
 import { UsersService } from '../users/users.service';
 import { ADMIN } from '../users/users.constanst';
 import { ACCESS_DENIED, PRODUCT_EXIST } from './products.constants';
-import { UpdateProductDto } from './dto/update.dto';
 import { StorageService } from '../storage/storage.service';
 import { JPEG, NOT_SUPPORTED, PNG } from '../storage/storage.constants';
 
@@ -39,42 +38,6 @@ export class ProductsService {
       await this.checkProductName(createProductDto.name);
 
       return this.productRepository.save(createProductDto);
-    }
-  }
-
-  async update(
-    userId: number,
-    productId: number,
-    updateProductDto: UpdateProductDto,
-  ): Promise<{ success: boolean }> {
-    const user = await this.userService.findById(userId);
-    if (user.role !== ADMIN) {
-      throw new ForbiddenException(ACCESS_DENIED);
-    } else {
-      if (updateProductDto.name) {
-        await this.checkProductName(updateProductDto.name);
-      }
-
-      await this.productRepository.update(productId, updateProductDto);
-
-      return { success: true };
-    }
-  }
-
-  async updateFile(
-    userId: number,
-    productId: number,
-    file: Express.Multer.File,
-  ): Promise<{ success: boolean }> {
-    const user = await this.userService.findById(userId);
-    if (user.role !== ADMIN) {
-      throw new ForbiddenException(ACCESS_DENIED);
-    } else {
-      const url = await this.checkExtensionsFromFile(file);
-
-      await this.productRepository.update(productId, { file: url });
-
-      return { success: true };
     }
   }
 

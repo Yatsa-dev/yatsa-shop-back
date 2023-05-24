@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   UploadedFile,
   UseGuards,
@@ -23,7 +22,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from '../decorators/user.decorator';
 import { PayloadDto } from '../auth/dto/payload.dto';
 import { CreateProductDto } from './dto/create.dto';
-import { UpdateProductDto } from './dto/update.dto';
 import { Product } from './entity/products.entity';
 
 @ApiTags('products')
@@ -49,37 +47,6 @@ export class ProductsController {
     @UploadedFile() file?: Express.Multer.File,
   ): Promise<Product> {
     return this.productsService.create(user.userId, createProductDto, file);
-  }
-
-  @ApiUnauthorizedResponse()
-  @ApiResponse({ status: 200, description: 'Return `{success: true}`' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('update/:productId')
-  update(
-    @User() user: PayloadDto,
-    @Param('productId') productId: number,
-    @Body() updateProductDto: UpdateProductDto,
-  ): Promise<{ success: boolean }> {
-    return this.productsService.update(
-      user.userId,
-      productId,
-      updateProductDto,
-    );
-  }
-
-  @ApiUnauthorizedResponse()
-  @ApiResponse({ status: 200, description: 'Return `{success: true}`' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('update/file/:productId')
-  @UseInterceptors(FileInterceptor('file'))
-  updateFile(
-    @User() user: PayloadDto,
-    @Param('productId') productId: number,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<{ success: boolean }> {
-    return this.productsService.updateFile(user.userId, productId, file);
   }
 
   @ApiUnauthorizedResponse()
