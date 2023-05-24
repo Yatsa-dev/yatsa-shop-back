@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -57,7 +58,7 @@ export class ProductsController {
   @Patch('update/:productId')
   update(
     @User() user: PayloadDto,
-    @Param('productId') productId: string,
+    @Param('productId') productId: number,
     @Body() updateProductDto: UpdateProductDto,
   ): Promise<{ success: boolean }> {
     return this.productsService.update(
@@ -75,9 +76,21 @@ export class ProductsController {
   @UseInterceptors(FileInterceptor('file'))
   updateFile(
     @User() user: PayloadDto,
-    @Param('productId') productId: string,
+    @Param('productId') productId: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<{ success: boolean }> {
     return this.productsService.updateFile(user.userId, productId, file);
+  }
+
+  @ApiUnauthorizedResponse()
+  @ApiResponse({ status: 200, description: 'Return `{success: true}`' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('delete/:productId')
+  delete(
+    @User() user: PayloadDto,
+    @Param('productId') productId: number,
+  ): Promise<{ success: boolean }> {
+    return this.productsService.delete(user.userId, productId);
   }
 }

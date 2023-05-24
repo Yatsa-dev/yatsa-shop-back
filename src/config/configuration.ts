@@ -1,10 +1,11 @@
 export default () => ({
   database: {
+    type: process.env.DB_TYPE || 'mysql',
     host: process.env.DB_HOST || 'localhost',
-    username: process.env.DB_USER || 'postgres',
+    username: process.env.DB_USER || 'admin',
     password: process.env.DB_PASSWORD || 'admin',
     database: process.env.DB_DATABASE || 'shop_back',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    port: parseInt(process.env.DB_PORT) || 3306,
   },
   jwt: {
     jwtSecret: process.env.JWT_SECRET || 'secret',

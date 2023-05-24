@@ -20,7 +20,6 @@ export class History {
 
   @ManyToOne(() => User, {
     nullable: false,
-    // createForeignKeyConstraints: false,
   })
   @JoinColumn()
   user: number;
