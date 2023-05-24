@@ -44,7 +44,7 @@ export class ProductsService {
 
   async update(
     userId: number,
-    productId: string,
+    productId: number,
     updateProductDto: UpdateProductDto,
   ): Promise<{ success: boolean }> {
     const user = await this.userService.findById(userId);
@@ -63,7 +63,7 @@ export class ProductsService {
 
   async updateFile(
     userId: number,
-    productId: string,
+    productId: number,
     file: Express.Multer.File,
   ): Promise<{ success: boolean }> {
     const user = await this.userService.findById(userId);
@@ -106,5 +106,20 @@ export class ProductsService {
 
   async findAll(): Promise<Product[]> {
     return this.productRepository.find();
+  }
+
+  async delete(
+    userId: number,
+    productId: number,
+  ): Promise<{ success: boolean }> {
+    const user = await this.userService.findById(userId);
+
+    if (user.role !== ADMIN) {
+      throw new ForbiddenException(ACCESS_DENIED);
+    } else {
+      await this.productRepository.delete({ id: productId });
+
+      return { success: true };
+    }
   }
 }

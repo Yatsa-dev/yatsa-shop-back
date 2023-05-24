@@ -18,33 +18,24 @@ You can override configuration parameters by passing them via ENV variables or b
 Default config parameters:
 
 ```javascript
-DB_HOST = localhost;
-DB_USER = postgres;
-DB_PASSWORD = admin;
-DB_DATABASE = shop_back;
-DB_PORT = 5432;
-JWT_SECRET = secret;
+DB_HOST = 'localhost';
+DB_USERNAME = 'admin';
+DB_PASSWORD = 'admin';
+DB_DATABASE = 'shop_back';
+DB_PORT = 3306;
+JWT_SECRET = 'secret';
 JWT_EXPIRES_IN = 3600;
 ```
 
 ## Step 3
 
-Now you need to migrate project data models to your database.\
-First, make sure you have psql on your local machine.\
+First, make sure you have mysql on your local machine.\
 
 ### Run in order to create `shop_back` database it it doesn't exist,
 
-`psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'shop_back'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE shop_back"`
+For create new data base I using utils MySQL Workbench
 
-### In order to migarate, run this command from the project root directory:
-
-### `psql -h db_hostname -d db_name -U db_username -f sql.sql`
-
-### Example
-
-`psql -h 127.0.0.1 -d shop_back -U postgres -f sql.sql`
-
-Here write you hostname after `-h`, database name after `-d`, username after `-U`. After `-f` leave `sql.sql`.
+`"CREATE DATABASE shop_back"`
 
 ## Step 4
 
@@ -56,18 +47,19 @@ Run this command in the project directory to start:
 
 You server runs on [http://localhost:3000](http://localhost:3000)
 
+## Also "dzen-server" hosted on Google Cloud Platform [https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app](https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app)
+
 ## About Admin Permissions
 
-### it need to do for create products on Yatsa-Shop
+### It need to do for create products on Yatsa-Shop
 
 ```
-1. Create any account.
-2. Using any DB manager, I use pgAdmin4 => change role in this account to 'admin'.
-3. Create some  products for testing application.
+1. For login to Yatsa-Shop using username=admin, password=admin or if server run local, you need to change one created user role to 'admin'.
+2.With this permissions you can create/update/delete some products for testing application.
 ```
 
 ## Database schema
 
 ![DB_diagram](./docs/schema.png)
 
-## In Repository also availability OpenAPI Specification
+## In Repository or `https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app/docs` availability OpenAPI Specification
