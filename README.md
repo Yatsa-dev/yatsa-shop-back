@@ -47,7 +47,7 @@ Run this command in the project directory to start:
 
 You server runs on [http://localhost:3000](http://localhost:3000)
 
-## Also "dzen-server" hosted on Google Cloud Platform [https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app](https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app)
+## Also "yatsa-shop" hosted on Google Cloud Platform [https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app](https://yatsa-shop-back-fk6pcl23iq-uc.a.run.app)
 
 ## About Admin Permissions
 
