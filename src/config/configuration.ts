@@ -16,4 +16,6 @@ export default () => ({
   cloudName: process.env.CLOUD_NAME,
   cloudApiKey: process.env.API_KEY,
   cloudApiSecret: process.env.API_SECRET,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_SECRET,
 });

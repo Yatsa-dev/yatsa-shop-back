@@ -7,11 +7,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
-import { BCRYPT, MOMENT } from './auth.constants';
+import { BCRYPT, GOOGLE_AUTH, MOMENT } from './auth.constants';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User } from '../users/entity/users.entity';
 import { UsersModule } from '../users/users.module';
+import { GoogleStrategy } from './strategy/google.strategy';
+import { OAuth2Client } from 'google-auth-library';
 
 @Module({
   imports: [
@@ -40,9 +42,20 @@ import { UsersModule } from '../users/users.module';
       provide: BCRYPT,
       useValue: bcrypt,
     },
+    {
+      provide: GOOGLE_AUTH,
+      useFactory: (configService: ConfigService) =>
+        new OAuth2Client(
+          configService.get<string>('googleClientId'),
+          configService.get<string>('googleClientSecret'),
+          'postmessage',
+        ),
+      inject: [ConfigService],
+    },
     AuthService,
     JwtStrategy,
     LocalStrategy,
+    GoogleStrategy,
   ],
   controllers: [AuthController],
 })
