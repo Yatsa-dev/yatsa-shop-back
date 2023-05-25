@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.dto';
-import { User } from './entity/users.entity';
+import { Users } from './entity/users.entity';
 import { BCRYPT, MOMENT, USER_EXIST } from './users.constanst';
 import { ConfigService } from '@nestjs/config';
 import { CreateByAccountsDto } from './dto/createByGoogle.dto';
@@ -13,8 +13,8 @@ import { LoginResponseDto } from 'src/auth/dto/loginResponse.dto';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
     private configService: ConfigService,
     private jwtService: JwtService,
     @Inject(BCRYPT) private bcrypt,
@@ -41,25 +41,25 @@ export class UsersService {
 
   async createByAccounts(
     createByGoogleDto: CreateByAccountsDto,
-  ): Promise<User> {
+  ): Promise<Users> {
     const user = await this.userRepository.save(createByGoogleDto);
 
     return user;
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: number): Promise<Users> {
     return this.userRepository.findOneBy({ id });
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<Users> {
     return this.userRepository.findOneBy({ email });
   }
 
-  async findByUserName(username: string): Promise<User> {
+  async findByUserName(username: string): Promise<Users> {
     return this.userRepository.findOneBy({ username });
   }
 
-  async generateCredentials(user: User): Promise<LoginResponseDto> {
+  async generateCredentials(user: Users): Promise<LoginResponseDto> {
     const payload: PayloadDto = { userId: user.id, email: user.email };
 
     return {

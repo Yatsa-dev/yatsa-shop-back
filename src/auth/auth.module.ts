@@ -10,14 +10,14 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { BCRYPT, GOOGLE_AUTH, MOMENT } from './auth.constants';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { User } from '../users/entity/users.entity';
+import { Users } from '../users/entity/users.entity';
 import { UsersModule } from '../users/users.module';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { OAuth2Client } from 'google-auth-library';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Users]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         return {

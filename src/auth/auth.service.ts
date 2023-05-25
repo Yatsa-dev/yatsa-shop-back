@@ -11,7 +11,7 @@ import {
   MOMENT,
   WRONG_PASSWORD,
 } from './auth.constants';
-import { User } from '../users/entity/users.entity';
+import { Users } from '../users/entity/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +44,7 @@ export class AuthService {
     return this.generateCredentials(user);
   }
 
-  async generateCredentials(user: User) {
+  async generateCredentials(user: Users) {
     const payload: PayloadDto = { userId: user.id, email: user.email };
 
     return {

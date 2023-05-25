@@ -4,13 +4,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { BCRYPT, MOMENT } from './users.constanst';
 import { UsersService } from './users.service';
-import { User } from './entity/users.entity';
+import { Users } from './entity/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), ConfigModule, JwtModule],
+  imports: [TypeOrmModule.forFeature([Users]), ConfigModule, JwtModule],
   providers: [
     {
       provide: BCRYPT,

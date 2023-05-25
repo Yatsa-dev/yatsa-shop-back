@@ -1,4 +1,4 @@
-import { User } from '../../users/entity/users.entity';
+import { Users } from '../../users/entity/users.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -18,7 +18,7 @@ export class History {
   @Column()
   amount: number;
 
-  @ManyToOne(() => User, {
+  @ManyToOne(() => Users, {
     nullable: false,
   })
   @JoinColumn()
