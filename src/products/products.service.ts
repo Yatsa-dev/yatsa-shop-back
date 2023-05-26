@@ -13,6 +13,7 @@ import { ACCESS_DENIED, PRODUCT_EXIST } from './products.constants';
 import { StorageService } from '../storage/storage.service';
 import { JPEG, NOT_SUPPORTED, PNG } from '../storage/storage.constants';
 import { QueryFilter } from './dto/filter.dto';
+import { MarketsAndCounts } from './types/data.types';
 
 @Injectable()
 export class ProductsService {
@@ -76,6 +77,26 @@ export class ProductsService {
     }
 
     return this.productRepository.find();
+  }
+
+  async marketsAndCounts(): Promise<MarketsAndCounts[]> {
+    const products = await this.productRepository.find();
+    const res = products.reduce((object, item) => {
+      if (!object[item.market]) {
+        object[item.market] = 0;
+      }
+      object[item.market] += 1;
+
+      return object;
+    }, {});
+    const array = Object.entries(res);
+    // eslint-disable-next-line prettier/prettier, prefer-const
+    let response = [];
+    for (const item of array) {
+      const obj = { market: item[0], count: item[1] };
+      response.push(obj);
+    }
+    return response;
   }
 
   async delete(

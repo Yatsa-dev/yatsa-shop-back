@@ -25,6 +25,7 @@ import { PayloadDto } from '../auth/dto/payload.dto';
 import { CreateProductDto } from './dto/create.dto';
 import { Product } from './entity/products.entity';
 import { QueryFilter } from './dto/filter.dto';
+import { MarketsAndCounts } from './types/data.types';
 
 @ApiTags('products')
 @Controller('products')
@@ -35,6 +36,15 @@ export class ProductsController {
   @Get()
   find(@Query() query: QueryFilter): Promise<Product[]> {
     return this.productsService.findAll(query);
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Return `{market: string, count: number}`',
+  })
+  @Get('markets')
+  marketsAndCounts(): Promise<MarketsAndCounts[]> {
+    return this.productsService.marketsAndCounts();
   }
 
   @ApiUnauthorizedResponse()
