@@ -55,7 +55,7 @@ You server runs on [http://localhost:3000](http://localhost:3000)
 
 ```
 1. For login to Yatsa-Shop using username=admin, password=admin or if server run local, you need to change one created user role to 'admin'.
-2.With this permissions you can create/update/delete some products for testing application.
+2.With this permissions you can create/delete some products for testing application.
 ```
 
 ## Database schema
