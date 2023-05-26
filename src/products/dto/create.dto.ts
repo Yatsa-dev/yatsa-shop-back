@@ -16,5 +16,9 @@ export class CreateProductDto {
   @IsString()
   description: string;
 
+  @IsNotEmpty()
+  @IsString()
+  market: string;
+
   file?: string;
 }

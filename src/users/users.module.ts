@@ -8,9 +8,14 @@ import { Users } from './entity/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { RefreshToken } from 'src/auth/entity/refreshToken.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users]), ConfigModule, JwtModule],
+  imports: [
+    TypeOrmModule.forFeature([Users, RefreshToken]),
+    ConfigModule,
+    JwtModule,
+  ],
   providers: [
     {
       provide: BCRYPT,

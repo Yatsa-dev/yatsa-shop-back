@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -23,6 +24,7 @@ import { User } from '../decorators/user.decorator';
 import { PayloadDto } from '../auth/dto/payload.dto';
 import { CreateProductDto } from './dto/create.dto';
 import { Product } from './entity/products.entity';
+import { QueryFilter } from './dto/filter.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -31,8 +33,8 @@ export class ProductsController {
 
   @ApiOkResponse({ type: [Product] })
   @Get()
-  find(): Promise<Product[]> {
-    return this.productsService.findAll();
+  find(@Query() query: QueryFilter): Promise<Product[]> {
+    return this.productsService.findAll(query);
   }
 
   @ApiUnauthorizedResponse()

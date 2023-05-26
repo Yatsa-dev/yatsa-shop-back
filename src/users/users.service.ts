@@ -9,6 +9,7 @@ import { CreateByAccountsDto } from './dto/createByGoogle.dto';
 import { PayloadDto } from 'src/auth/dto/payload.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginResponseDto } from 'src/auth/dto/loginResponse.dto';
+import { RefreshToken } from 'src/auth/entity/refreshToken.entity';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,8 @@ export class UsersService {
     private jwtService: JwtService,
     @Inject(BCRYPT) private bcrypt,
     @Inject(MOMENT) private moment,
+    @InjectRepository(RefreshToken)
+    private refreshRepository: Repository<RefreshToken>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<LoginResponseDto> {
@@ -59,8 +62,18 @@ export class UsersService {
     return this.userRepository.findOneBy({ username });
   }
 
+  async createRefreshToken(userId: number): Promise<RefreshToken> {
+    const refreshToken = await this.refreshRepository.save({
+      createdAt: new Date(),
+      userId,
+    });
+
+    return refreshToken;
+  }
+
   async generateCredentials(user: Users): Promise<LoginResponseDto> {
     const payload: PayloadDto = { userId: user.id, email: user.email };
+    const refreshToken = await this.createRefreshToken(user.id);
 
     return {
       access_token: this.jwtService.sign(payload, {
@@ -69,6 +82,7 @@ export class UsersService {
       expires_at: this.moment()
         .add(this.configService.get<number>('jwtExpiresInt'), 'seconds')
         .unix(),
+      refresh_token: refreshToken.id,
     };
   }
 }

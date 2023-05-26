@@ -14,10 +14,11 @@ import { Users } from '../users/entity/users.entity';
 import { UsersModule } from '../users/users.module';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { OAuth2Client } from 'google-auth-library';
+import { RefreshToken } from './entity/refreshToken.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, RefreshToken]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         return {

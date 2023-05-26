@@ -18,7 +18,7 @@ export class StorageService {
   async transformImage(file: Express.Multer.File) {
     const path = `${os.tmpdir()}/${file.originalname}`;
     const image = await this.jimp.read(file.buffer);
-    await image.autocrop().resize(320, 240).writeAsync(path);
+    await image.autocrop().resize(640, 480).writeAsync(path);
 
     return path;
   }
@@ -40,7 +40,7 @@ export class StorageService {
 
   async validateImageSizeAndGetUrl(file: Express.Multer.File) {
     let imagePath: string;
-    if (file.size > 640 * 480) {
+    if (file.size > 1980 * 1020) {
       const filePath = await this.transformImage(file);
       imagePath = filePath;
     } else {

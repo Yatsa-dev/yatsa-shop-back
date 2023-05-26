@@ -12,6 +12,7 @@ import { ADMIN } from '../users/users.constanst';
 import { ACCESS_DENIED, PRODUCT_EXIST } from './products.constants';
 import { StorageService } from '../storage/storage.service';
 import { JPEG, NOT_SUPPORTED, PNG } from '../storage/storage.constants';
+import { QueryFilter } from './dto/filter.dto';
 
 @Injectable()
 export class ProductsService {
@@ -67,7 +68,13 @@ export class ProductsService {
     return url;
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAll(query: QueryFilter): Promise<Product[]> {
+    if (query.market) {
+      return this.productRepository.find({
+        where: { market: query.market },
+      });
+    }
+
     return this.productRepository.find();
   }
 
