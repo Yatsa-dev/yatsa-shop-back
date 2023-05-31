@@ -36,6 +36,40 @@ paths:
           description: ''
       tags:
         - auth
+  /auth/refresh:
+    post:
+      operationId: AuthController_refreshToken
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto'
+        '401':
+          description: ''
+      tags:
+        - auth
+  /auth/logout:
+    get:
+      operationId: AuthController_logout
+      parameters: []
+      responses:
+        '200':
+          description: 'Return `{success: true}`'
+        '401':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
   /users/signup:
     post:
       operationId: UsersController_create
@@ -55,10 +89,32 @@ paths:
                 $ref: '#/components/schemas/LoginResponseDto'
       tags:
         - users
+  /users/profile:
+    get:
+      operationId: UsersController_getProfile
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '401':
+          description: ''
+      tags:
+        - users
+      security:
+        - bearer: []
   /products:
     get:
       operationId: ProductsController_find
-      parameters: []
+      parameters:
+        - name: market
+          required: false
+          in: query
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -68,6 +124,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+      tags:
+        - products
+  /products/markets:
+    get:
+      operationId: ProductsController_marketsAndCounts
+      parameters: []
+      responses:
+        '200':
+          description: 'Return `{market: string, count: number}`'
       tags:
         - products
   /products/create:
@@ -93,21 +158,15 @@ paths:
         - products
       security:
         - bearer: []
-  /products/update/{productId}:
-    patch:
-      operationId: ProductsController_update
+  /products/delete/{productId}:
+    delete:
+      operationId: ProductsController_delete
       parameters:
         - name: productId
           required: true
           in: path
           schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProductDto'
+            type: number
       responses:
         '200':
           description: 'Return `{success: true}`'
@@ -115,66 +174,6 @@ paths:
           description: ''
       tags:
         - products
-      security:
-        - bearer: []
-  /products/update/file/{productId}:
-    patch:
-      operationId: ProductsController_updateFile
-      parameters:
-        - name: productId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'Return `{success: true}`'
-        '401':
-          description: ''
-      tags:
-        - products
-      security:
-        - bearer: []
-  /history:
-    get:
-      operationId: HistoryController_find
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/History'
-        '401':
-          description: ''
-      tags:
-        - history
-      security:
-        - bearer: []
-  /history/save:
-    post:
-      operationId: HistoryController_saveOrder
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateHistoryDto'
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/History'
-        '401':
-          description: ''
-      tags:
-        - history
       security:
         - bearer: []
 info:
@@ -208,9 +207,19 @@ components:
           type: string
         expires_at:
           type: string
+        refresh_token:
+          type: string
       required:
         - access_token
         - expires_at
+        - refresh_token
+    RefreshTokenDto:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+      required:
+        - refresh_token
     CreateUserDto:
       type: object
       properties:
@@ -224,11 +233,30 @@ components:
         - username
         - password
         - email
+    Users:
+      type: object
+      properties:
+        id:
+          type: number
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+      required:
+        - id
+        - username
+        - password
+        - email
+        - role
     Product:
       type: object
       properties:
         id:
-          type: string
+          type: number
         name:
           type: string
         price:
@@ -237,12 +265,15 @@ components:
           type: string
         description:
           type: string
+        market:
+          type: string
       required:
         - id
         - name
         - price
         - file
         - description
+        - market
     CreateProductDto:
       type: object
       properties:
@@ -252,45 +283,12 @@ components:
           type: number
         description:
           type: string
+        market:
+          type: string
         file:
           type: string
       required:
         - name
         - price
         - description
-    UpdateProductDto:
-      type: object
-      properties:
-        name:
-          type: string
-        price:
-          type: number
-        description:
-          type: string
-    History:
-      type: object
-      properties:
-        id:
-          type: number
-        createdAt:
-          type: string
-        amount:
-          type: number
-        user:
-          type: number
-      required:
-        - id
-        - createdAt
-        - amount
-        - user
-    CreateHistoryDto:
-      type: object
-      properties:
-        amount:
-          type: number
-        createdAt:
-          type: string
-        user:
-          type: object
-      required:
-        - amount
+        - market
